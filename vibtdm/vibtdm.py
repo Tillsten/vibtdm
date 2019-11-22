@@ -109,11 +109,13 @@ class Vibration:
     """Single Vibration"""
     name: str
     freq_range: Tuple[float, float] = attr.ib()
-
+    strength: float = attr.ib(0)
     tdm: Vector = attr.ib(None)
-    strength: float = attr.ib(np.nan)
     origin: Optional[Vector] = attr.ib(None)
     angle: Optional[float] = attr.ib(None)
+
+
+WATER_NAMES = ("HOH", "WAT", "TIP3W", "TIP", "LYS")
 
 
 @attr.s(auto_attribs=True)
@@ -136,7 +138,8 @@ class ResModes:
     def __attrs_post_init__(self):
         "Calculate all known modes"
         resname = self.residue.get_resname()
-        # Check if residue is amino acid.
+        #if resname in WATER_NAMES:  # Dont handle water
+        #    return
         if not self.residue.id[0] == ' ':
             return
         self.amide_one()
